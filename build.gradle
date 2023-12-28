@@ -81,7 +81,7 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    shadowIn 'de.javagl:obj:0.3.0'
+    shadowIn 'de.javagl:obj:0.4.0'
 }
 
 shadowJar {
@@ -107,7 +107,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    it.options.release.set(17)
 }
 
 java {

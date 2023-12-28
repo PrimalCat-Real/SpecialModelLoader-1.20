@@ -1,6 +1,7 @@
 package dev.felnull.specialmodelloader.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.felnull.specialmodelloader.api.SpecialModelLoaderAPI;
 import dev.felnull.specialmodelloader.api.model.SpecialBaseLoader;
@@ -61,7 +62,11 @@ public class SpecialModelLoaderAPIImpl implements SpecialModelLoaderAPI {
             if (loader != null) {
                 JsonObject ret = new JsonObject();
                 Collections.reverse(models);
-                models.forEach(r -> r.asMap().forEach((name, rlm) -> ret.add(name, rlm.deepCopy())));
+                models.forEach(r -> r.entrySet().forEach(entry -> {
+                    String name = entry.getKey();
+                    JsonElement rlm = entry.getValue();
+                    ret.add(name, rlm.deepCopy());
+                }));
                 return loader.loadModel(resourceManager, ret);
             }
 

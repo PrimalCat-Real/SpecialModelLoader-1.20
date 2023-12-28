@@ -1,5 +1,7 @@
 package dev.felnull.specialmodelloader.impl.model.obj;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Vector3f;
 import de.javagl.obj.Mtl;
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjFace;
@@ -18,12 +20,11 @@ import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec2;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Vector3f;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.function.Function;
 
 public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
@@ -39,17 +40,18 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
     }
 
     @Override
-    public Collection<ResourceLocation> getDependencies() {
+    public @NotNull Collection<ResourceLocation> getDependencies() {
         return List.of();
     }
 
     @Override
-    public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
+    public @NotNull Collection<Material> getMaterials(Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
+        return Collections.emptySet();
     }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelBaker modelBaker, Function<Material, TextureAtlasSprite> textureGetter, ModelState modelState, ResourceLocation resourceLocation) {
+    public BakedModel bake(ModelBakery modelBakery, Function<Material, TextureAtlasSprite> function, ModelState modelState, ResourceLocation resourceLocation) {
         final Renderer renderer = RendererAccess.INSTANCE.getRenderer() != null ? RendererAccess.INSTANCE.getRenderer() : IndigoRenderer.INSTANCE;
 
         MeshBuilder builder = renderer.meshBuilder();
@@ -59,10 +61,10 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
 
         materialGroups.forEach((name, model) -> {
             for (int i = 0; i < model.getNumFaces(); i++) {
-                emitFace(emitter, modelState, textureGetter, name, model, model.getFace(i));
+                emitFace(emitter, modelState, function, name, model, model.getFace(i));
             }
         });
-        return new SimpleMeshModel(getModelOption().isUseAmbientOcclusion(), getGuiLight().lightLikeBlock(), textureGetter.apply(getParticleLocation()), getModelOption().getTransforms(), builder.build());
+        return new SimpleMeshModel(getModelOption().isUseAmbientOcclusion(), getGuiLight().lightLikeBlock(), function.apply(getParticleLocation()), getModelOption().getTransforms(), builder.build());
     }
 
     private void emitFace(QuadEmitter emitter, ModelState modelState, Function<Material, TextureAtlasSprite> textureGetter, String materialName, Obj fObj, ObjFace face) {
@@ -99,7 +101,8 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
         var vertex = new Vector3f(vt.getX(), vt.getY(), vt.getZ());
 
         vertex.add(-0.5f, -0.5f, -0.5f);
-        vertex.rotate(modelState.getRotation().getLeftRotation());
+
+        vertex.transform(modelState.getRotation().getLeftRotation());
         vertex.add(0.5f, 0.5f, 0.5f);
 
         var normal = fObj.getNormal(face.getNormalIndex(vertexNum));

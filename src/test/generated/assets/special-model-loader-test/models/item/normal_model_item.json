@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "special-model-loader-test:item/normal_model_item"
-  }
-}
