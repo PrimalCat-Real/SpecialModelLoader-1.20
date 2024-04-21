@@ -1,7 +1,6 @@
 package dev.felnull.specialmodelloader.impl.model.obj;
 
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Vector3f;
 import de.javagl.obj.Mtl;
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjFace;
@@ -22,6 +21,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 
 import java.util.*;
@@ -41,17 +41,17 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
 
     @Override
     public @NotNull Collection<ResourceLocation> getDependencies() {
-        return List.of();
+        return Collections.emptySet();
     }
 
     @Override
-    public @NotNull Collection<Material> getMaterials(Function<ResourceLocation, UnbakedModel> function, Set<Pair<String, String>> set) {
-        return Collections.emptySet();
+    public void resolveParents(Function<ResourceLocation, UnbakedModel> function) {
+
     }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelBakery modelBakery, Function<Material, TextureAtlasSprite> function, ModelState modelState, ResourceLocation resourceLocation) {
+    public BakedModel bake(ModelBaker modelBaker, Function<Material, TextureAtlasSprite> function, ModelState modelState, ResourceLocation resourceLocation) {
         final Renderer renderer = RendererAccess.INSTANCE.getRenderer() != null ? RendererAccess.INSTANCE.getRenderer() : IndigoRenderer.INSTANCE;
 
         MeshBuilder builder = renderer.meshBuilder();
@@ -102,7 +102,7 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
 
         vertex.add(-0.5f, -0.5f, -0.5f);
 
-        vertex.transform(modelState.getRotation().getLeftRotation());
+        vertex.rotate(modelState.getRotation().getLeftRotation());
         vertex.add(0.5f, 0.5f, 0.5f);
 
         var normal = fObj.getNormal(face.getNormalIndex(vertexNum));
