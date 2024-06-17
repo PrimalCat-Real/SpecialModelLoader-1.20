@@ -1,7 +1,8 @@
 package dev.felnull.specialmodelloader.impl;
 
-import dev.felnull.specialmodelloader.impl.handler.SMLModelResourceHandler;
+import dev.felnull.specialmodelloader.impl.handler.SMLModelLoadingPlugin;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.impl.client.model.loading.ModelLoadingPluginManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,6 +12,7 @@ public class SpecialModelLoader implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        SMLModelResourceHandler.init();
+//        SMLModelLoadingPlugin.init();
+//        ModelLoadingPluginManager.registerPlugin(new SMLModelLoadingPlugin());
     }
 }

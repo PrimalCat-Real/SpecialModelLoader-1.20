@@ -27,7 +27,7 @@ public record ModelOptionImpl(boolean useAmbientOcclusion, BlockModel.GuiLight g
 
         ResourceLocation particle = null;
         if (modelJson.has("particle"))
-            particle = new ResourceLocation(GsonHelper.getAsString(modelJson, "particle"));
+            particle = ResourceLocation.parse(GsonHelper.getAsString(modelJson, "particle"));
 
         return new ModelOptionImpl(GsonHelper.getAsBoolean(modelJson, "ambientocclusion", true), guiLight, particle, transform);
     }

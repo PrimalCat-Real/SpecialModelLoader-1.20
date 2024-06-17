@@ -51,7 +51,7 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
 
     @Nullable
     @Override
-    public BakedModel bake(ModelBaker modelBaker, Function<Material, TextureAtlasSprite> function, ModelState modelState, ResourceLocation resourceLocation) {
+    public BakedModel bake(ModelBaker modelBaker, Function<Material, TextureAtlasSprite> function, ModelState modelState) {
         final Renderer renderer = RendererAccess.INSTANCE.getRenderer() != null ? RendererAccess.INSTANCE.getRenderer() : IndigoRenderer.INSTANCE;
 
         MeshBuilder builder = renderer.meshBuilder();
@@ -66,6 +66,7 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
         });
         return new SimpleMeshModel(getModelOption().isUseAmbientOcclusion(), getGuiLight().lightLikeBlock(), function.apply(getParticleLocation()), getModelOption().getTransforms(), builder.build());
     }
+
 
     private void emitFace(QuadEmitter emitter, ModelState modelState, Function<Material, TextureAtlasSprite> textureGetter, String materialName, Obj fObj, ObjFace face) {
         for (int i = 0; i < face.getNumVertices(); i++) {
@@ -86,7 +87,8 @@ public class ObjUnbakedModelModel extends SpecialBaseUnbakedModel {
             flg |= MutableQuadView.BAKE_LOCK_UV;
 
         if (smtl != null && smtl.getMapKd() != null) {
-            emitter.spriteBake(0, textureGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, new ResourceLocation(smtl.getMapKd()))), flg);
+            // @TODO fix method in the end of line
+            emitter.spriteBake(0, textureGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS,  ResourceLocation.parse(smtl.getMapKd()))), flg);
         } else {
             emitter.spriteBake(0, textureGetter.apply(MISSING), flg);
         }
