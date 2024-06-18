@@ -3,7 +3,7 @@ package dev.felnull.specialmodelloader.api;
 import dev.felnull.specialmodelloader.api.model.SpecialBaseLoader;
 import dev.felnull.specialmodelloader.api.model.obj.ObjModelLoader;
 import dev.felnull.specialmodelloader.impl.SpecialModelLoaderAPIImpl;
-import net.fabricmc.fabric.api.client.model.ModelProviderException;
+//import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -22,5 +22,5 @@ public interface SpecialModelLoaderAPI {
 
     @NotNull ObjModelLoader getObjLoader();
 
-    @Nullable UnbakedModel loadModel(@NotNull ResourceManager resourceManager, @NotNull ResourceLocation modelLocation) throws ModelProviderException;
+    @Nullable UnbakedModel loadModel(@NotNull ResourceManager resourceManager, @NotNull ResourceLocation modelLocation) throws IllegalStateException;
 }

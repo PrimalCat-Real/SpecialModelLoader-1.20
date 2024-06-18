@@ -9,7 +9,7 @@ import dev.felnull.specialmodelloader.api.model.obj.ObjModelLoader;
 import dev.felnull.specialmodelloader.impl.model.ForgeObjModelCompat;
 import dev.felnull.specialmodelloader.impl.model.obj.ObjModelLoaderImp;
 import dev.felnull.specialmodelloader.impl.util.JsonModelUtils;
-import net.fabricmc.fabric.api.client.model.ModelProviderException;
+//import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -37,7 +37,7 @@ public class SpecialModelLoaderAPIImpl implements SpecialModelLoaderAPI {
     }
 
     @Override
-    public @Nullable UnbakedModel loadModel(@NotNull ResourceManager resourceManager, @NotNull ResourceLocation modelLocation) throws ModelProviderException {
+    public @Nullable UnbakedModel loadModel(@NotNull ResourceManager resourceManager, @NotNull ResourceLocation modelLocation) throws IllegalStateException {
         List<JsonObject> models = new ArrayList<>();
         JsonObject jo = readJson(resourceManager, modelLocation);
 
@@ -85,15 +85,15 @@ public class SpecialModelLoaderAPIImpl implements SpecialModelLoaderAPI {
                 .orElse(null);
     }
 
-    private JsonObject readJson(ResourceManager resourceManager, ResourceLocation modelLocation) throws ModelProviderException {
-        ResourceLocation modelPath = new ResourceLocation(modelLocation.getNamespace(), "models/" + modelLocation.getPath() + ".json");
+    private JsonObject readJson(ResourceManager resourceManager, ResourceLocation modelLocation) throws IllegalStateException {
+        ResourceLocation modelPath = ResourceLocation.fromNamespaceAndPath(modelLocation.getNamespace(), "models/" + modelLocation.getPath() + ".json");
         var res = resourceManager.getResource(modelPath);
         if (res.isEmpty()) return null;
         JsonObject jo;
         try (var reader = res.get().openAsReader()) {
             jo = GsonHelper.parse(reader);
         } catch (IOException ex) {
-            throw new ModelProviderException("Failed to load json: " + modelLocation, ex);
+            throw new IllegalStateException("Failed to load json: " + modelLocation, ex);
         }
         return jo;
     }

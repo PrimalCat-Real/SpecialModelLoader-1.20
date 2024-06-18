@@ -10,7 +10,7 @@ public class JsonModelUtils {
             return null;
 
         if (modelJson.has("parent"))
-            return new ResourceLocation(GsonHelper.getAsString(modelJson, "parent"));
+            return ResourceLocation.parse(GsonHelper.getAsString(modelJson, "parent"));
         return null;
     }
 }

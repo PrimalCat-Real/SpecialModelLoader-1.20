@@ -14,7 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class SpecialModelDataGenHelper {
-    private static final ResourceLocation OBJ_LOADER = new ResourceLocation(SpecialModelLoader.MODID, "builtin/obj");
+    private static final ResourceLocation OBJ_LOADER = ResourceLocation.fromNamespaceAndPath(SpecialModelLoader.MODID, "builtin/obj");
 
     public static void generateObjModel(@NotNull ResourceLocation location, @NotNull ResourceLocation objLocation, boolean flipV, boolean useAmbientOcclusion, @Nullable ResourceLocation particle, @NotNull BiConsumer<ResourceLocation, Supplier<JsonElement>> output) {
         output.accept(location, () -> {
